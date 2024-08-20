@@ -35,7 +35,7 @@ const createProduct = async (req, res, next)=>{
             } = req.body
         let images = [...req.body.images];
         if(images.length === 0){
-           return res.status(400).send('Added Product Images')
+           return res.status(400).send('Added Product Images successfully')
         }
         let imagesBuffer = [];
 
