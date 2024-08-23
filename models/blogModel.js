@@ -18,10 +18,11 @@ const blogSchema = new mongoose.Schema(
     },
 
     category: {
-      type: String,
-      required: true
-    },
-
+    type: [String], 
+    required: true,
+  },
+    
+   
     cloudinary_id: {
       type: String,
       required: true

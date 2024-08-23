@@ -1,16 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const blogController = require("../controller/blogController");
+// const blogController = require("../controller/blogController");
 const storage = require("../lib/multer");
 
-router.get("/trends", blogController.getTrends);
-router.get("/news", blogController.getNews);
 router.get("/", blogController.getBlogs);
 router.get("/:id", blogController.getBlogId);
-
-
-
-
 router.post(
   "/create",
   storage.single("cloudinary_id"),

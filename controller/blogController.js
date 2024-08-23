@@ -25,13 +25,37 @@ const createBlog = async (req, res) => {
 };
 
 // Get All Blogs
+
 const getBlogs = async (req, res) => {
   const getAllBlogs = await Blog.find();
+
   if (!getAllBlogs) {
     return res.status(400).send("Bad request");
   }
   return res.status(200).json({ getAllBlogs });
 };
+
+//get blogs by trends
+const getTrends = async (req, res) => {
+  const getAllTrends = await Blog.find({category:"trends"});
+
+  if (!getAllTrends) {
+    return res.status(400).send("Bad request");
+  }
+  return res.status(200).json({ getAllTrends });
+
+};
+//get blogs by news
+const getNews = async (req, res) => {
+  const getAllNews = await Blog.find({ category: "news" });
+
+  if (!getAllNews) {
+    return res.status(400).send("Bad request");
+  }
+  return res.status(200).json({ getAllNews });
+};
+
+
 
 // Get Blog By Id
 const getBlogId = async (req, res) => {
@@ -43,6 +67,11 @@ const getBlogId = async (req, res) => {
   const getBlogById = await Blog.findById(getId);
   return res.status(200).json({ getBlogById });
 };
+
+
+
+
+
 
 const updateBlogId = async (req, res) => {
   let user = await Blog.findById(req.params.id);
@@ -83,5 +112,8 @@ module.exports = {
   getBlogs,
   getBlogId,
   updateBlogId,
-  deleteBlogId
+  deleteBlogId,
+  getTrends,
+  getNews
+
 };
