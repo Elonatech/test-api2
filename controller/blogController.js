@@ -69,10 +69,6 @@ const getBlogId = async (req, res) => {
 };
 
 
-
-
-
-
 const updateBlogId = async (req, res) => {
   let user = await Blog.findById(req.params.id);
   // Check if the user is found
