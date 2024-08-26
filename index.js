@@ -5,6 +5,7 @@ const PORT = process.env.PORT;
 const cors = require("cors");
 const adminRoutes = require("./routes/adminRoute");
 const blogRoutes = require("./routes/blogRoute");
+const newsRoute = require("./routes/newsRoute")
 const productRoutes = require("./routes/productRoute");
 const emailRoutes = require("./routes/emailRoute");
 const { connectMongodb } = require("./config/database");

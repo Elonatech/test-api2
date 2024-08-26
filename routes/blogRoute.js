@@ -7,6 +7,8 @@ router.get("/trends", blogController.getTrends);
 router.get("/news", blogController.getNews);
 router.get("/", blogController.getBlogs);
 router.get("/:id", blogController.getBlogId);
+router.get("/news/:id", blogController.getNewsById);
+router.get("/trends/:id", blogController.getTrendsById);
 
 
 

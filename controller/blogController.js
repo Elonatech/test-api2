@@ -55,7 +55,39 @@ const getNews = async (req, res) => {
   return res.status(200).json({ getAllNews });
 };
 
+//get news by id
 
+const getNewsById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract ID from request parameters
+    const news = await Blog.findById(id); // Find news by ID
+
+    if (!news) {
+      return res.status(404).send("news not found");
+    }
+
+    return res.status(200).json(news);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+};
+
+const getTrendsById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract ID from request parameters
+    const trends = await Blog.findById(id); // Find news by ID
+
+    if (!trends) {
+      return res.status(404).send("news not found");
+    }
+
+    return res.status(200).json(trends);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server Error");
+  }
+};
 
 // Get Blog By Id
 const getBlogId = async (req, res) => {
@@ -110,6 +142,7 @@ module.exports = {
   updateBlogId,
   deleteBlogId,
   getTrends,
-  getNews
-
+  getNews,
+  getNewsById,
+  getTrendsById
 };
