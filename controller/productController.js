@@ -112,6 +112,75 @@ const getProductById = async (req, res) => {
   return res.status(200).json({ getProductById });
 };
 
+const getProductsByFilter = async (req,res) =>{
+   const {
+    priceMin,
+    priceMax,
+     ram,
+     brand,
+  
+     name,
+     hardDisk,
+     category,
+     discount,
+     rating
+   } = req.query;
+
+   // Build your filter logic here based on the parameters
+ let filterCriteria = {};
+
+ if (priceMin || priceMax) {
+   filterCriteria.price = {};
+   if (priceMin) filterCriteria.price.$gte = Number(priceMin);
+   if (priceMax) filterCriteria.price.$lte = Number(priceMax);
+ }
+ if (ram) {
+   filterCriteria.ram = { $in: ram.split(",").map(Number) };
+ }
+ if (brand) {
+   filterCriteria.brand = {
+     $in: brand.split(",").map((b) => new RegExp(`^${b}$`, "i"))
+   };
+ }
+if (name) {
+  filterCriteria.name = { $regex: new RegExp(name, "i") }; // Case-insensitive search
+}
+ if (hardDisk) {
+   filterCriteria.hardDisk = { $in: hardDisk.split(",").map(Number) };
+ }
+ if (category) {
+   filterCriteria.category = {
+     $in: category.split(",").map((os) => new RegExp(`^${os}$`, "i"))
+   };
+ }
+ if (discount) {
+   filterCriteria.discount = { $gte: Number(discount) };
+ }
+ if (rating) {
+   filterCriteria.rating = { $gte: Number(rating) };
+ }
+
+
+   const products = await Product.find({
+     $and: Object.keys(filterCriteria).map((key) => {
+       if (typeof filterCriteria[key].$in !== "undefined") {
+         return {
+           [key]: {
+             $in: filterCriteria[key].$in.map((value) =>
+               typeof value === "string" ? value.toLowerCase() : value
+             )
+           }
+         };
+       } else {
+         return { [key]: filterCriteria[key] };
+       }
+     })
+   });
+
+   // Respond with the products
+   res.json(products);
+}
+
 const updateProduct = async (req, res, next) => {
   try {
     let product = await Product.findById(req.params.id);
@@ -242,6 +311,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductsByFilter,
   getProductById,
   deleteProduct,
   updateProduct,
