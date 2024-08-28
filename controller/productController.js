@@ -118,7 +118,7 @@ const getProductsByFilter = async (req,res) =>{
     priceMax,
      ram,
      brand,
-  
+     price,
      name,
      hardDisk,
      category,
@@ -134,6 +134,10 @@ const getProductsByFilter = async (req,res) =>{
    if (priceMin) filterCriteria.price.$gte = Number(priceMin);
    if (priceMax) filterCriteria.price.$lte = Number(priceMax);
  }
+   if (price) {
+     const [minPrice, maxPrice] = price.split("-").map(Number);
+     filterCriteria.price = { $gte: minPrice, $lte: maxPrice };
+   }
  if (ram) {
    filterCriteria.ram = { $in: ram.split(",").map(Number) };
  }
