@@ -112,78 +112,73 @@ const getProductById = async (req, res) => {
   return res.status(200).json({ getProductById });
 };
 
-const getProductsByFilter = async (req,res) =>{
-   const {
-    priceMin,
-    priceMax,
-     ram,
-     brand,
-     price,
-     name,
-     hardDisk,
-     category,
-     discount,
-     rating
-   } = req.query;
 
-   // Build your filter logic here based on the parameters
- let filterCriteria = {};
-
- if (priceMin || priceMax) {
-   filterCriteria.price = {};
-   if (priceMin) filterCriteria.price.$gte = Number(priceMin);
-   if (priceMax) filterCriteria.price.$lte = Number(priceMax);
- }
-   if (price) {
-     const [minPrice, maxPrice] = price.split("-").map(Number);
-     filterCriteria.price = { $gte: minPrice, $lte: maxPrice };
-   }
- if (ram) {
-   filterCriteria.ram = { $in: ram.split(",").map(Number) };
- }
- if (brand) {
-   filterCriteria.brand = {
-     $in: brand.split(",").map((b) => new RegExp(`^${b}$`, "i"))
-   };
- }
-if (name) {
-  filterCriteria.name = { $regex: new RegExp(name, "i") }; // Case-insensitive search
-}
- if (hardDisk) {
-   filterCriteria.hardDisk = { $in: hardDisk.split(",").map(Number) };
- }
- if (category) {
-   filterCriteria.category = {
-     $in: category.split(",").map((os) => new RegExp(`^${os}$`, "i"))
-   };
- }
- if (discount) {
-   filterCriteria.discount = { $gte: Number(discount) };
- }
- if (rating) {
-   filterCriteria.rating = { $gte: Number(rating) };
- }
+const getComputers = async (req, res) => {
+  try {
+    const products = await Product.find({ category: "Computer" });
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message
+    });
+  }
+};
 
 
-   const products = await Product.find({
-     $and: Object.keys(filterCriteria).map((key) => {
-       if (typeof filterCriteria[key].$in !== "undefined") {
-         return {
-           [key]: {
-             $in: filterCriteria[key].$in.map((value) =>
-               typeof value === "string" ? value.toLowerCase() : value
-             )
-           }
-         };
-       } else {
-         return { [key]: filterCriteria[key] };
-       }
-     })
-   });
 
-   // Respond with the products
-   res.json(products);
-}
+
+const getProductsByFilter = async (req, res) => {
+   try {
+     // Initialize filter criteria
+     let filterCriteria = {};
+
+     // Helper function to create a regex pattern that ignores case and spaces
+     const createRegex = (value) => {
+       if (!value) return;
+       // Remove spaces and ignore case
+       const cleanedValue = value.replace(/\s+/g, "").toLowerCase();
+       console.log("Creating regex for:", cleanedValue); // Debugging line
+       return new RegExp(cleanedValue, "i");
+     };
+
+     // Build the filter criteria based on query parameters
+     if (req.query.ram) {
+       filterCriteria["computerProperty.ram"] = {
+         $regex: createRegex(req.query.ram)
+       };
+     }
+     if (req.query.price) {
+       filterCriteria["computerProperty.price"] = {
+         $regex: createRegex(req.query.price)
+       };
+     }
+     if (req.query.brand) {
+       filterCriteria["computerProperty.brand"] = {
+         $regex: createRegex(req.query.brand)
+       };
+     }
+     if (req.query.drive) {
+       filterCriteria["computerProperty.drive"] = {
+         $regex: createRegex(req.query.drive)
+       };
+     }
+
+     console.log("Filter Criteria:", filterCriteria); // Debugging line
+     const products = await Product.find(filterCriteria);
+     res.status(200).json({ success: true, data: products });
+   } catch (error) {
+    console.error("error:", error.message);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
+};
+
+
 
 const updateProduct = async (req, res, next) => {
   try {
@@ -317,6 +312,7 @@ module.exports = {
   getAllProducts,
   getProductsByFilter,
   getProductById,
+  getComputers,
   deleteProduct,
   updateProduct,
   updateProductImage
