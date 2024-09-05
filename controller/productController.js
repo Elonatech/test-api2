@@ -136,7 +136,7 @@ const getComputers = async (req, res) => {
 const getProductsByFilter = async (req, res) => {
   try {
     // Initialize filter criteria
-    let filterCriteria = {};
+    let filterCriteria = { category: "Computer" }; // Always filter by "Computer"
 
     // Helper function to extract numbers and create a regex pattern
     const createNumberRegex = (value) => {
@@ -173,7 +173,6 @@ const getProductsByFilter = async (req, res) => {
       };
     }
 
-    console.log("Filter Criteria:", filterCriteria); // Debugging line
     const products = await Product.find(filterCriteria);
     res.status(200).json({ success: true, data: products });
   } catch (error) {
