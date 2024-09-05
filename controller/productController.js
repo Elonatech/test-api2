@@ -162,11 +162,11 @@ const getProductsByFilter = async (req, res) => {
         $regex: createNumberRegex(req.query.drive)
       };
     }
-    if (req.query.brand) {
-      filterCriteria["computerProperty.brand"] = {
-        $regex: new RegExp(cleanUpValue(req.query.brand), "i") // Case-insensitive brand match
-      };
-    }
+      if (req.query.brand) {
+        filterCriteria["brand"] = {
+          $regex: new RegExp(cleanUpValue(req.query.brand), "i") // Case-insensitive and space-removed brand match
+        };
+      }
     if (req.query.price) {
       filterCriteria["computerProperty.price"] = {
         $regex: new RegExp(cleanUpValue(req.query.price)) // Match price after removing commas and spaces
