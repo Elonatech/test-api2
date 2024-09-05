@@ -134,49 +134,54 @@ const getComputers = async (req, res) => {
 
 
 const getProductsByFilter = async (req, res) => {
-   try {
-     // Initialize filter criteria
-     let filterCriteria = {};
+  try {
+    // Initialize filter criteria
+    let filterCriteria = {};
 
-     // Helper function to create a regex pattern that ignores case and spaces
-     const createRegex = (value) => {
-       if (!value) return;
-       // Remove spaces and ignore case
-       const cleanedValue = value.replace(/\s+/g, "").toLowerCase();
-       console.log("Creating regex for:", cleanedValue); // Debugging line
-       return new RegExp(cleanedValue, "i");
-     };
+    // Helper function to extract numbers and create a regex pattern
+    const createNumberRegex = (value) => {
+      if (!value) return;
+      const cleanedValue = value.replace(/\D/g, ""); // Extract numeric part
+      return new RegExp(`\\b${cleanedValue}\\b`, "i"); // Match the number as a whole word
+    };
 
-     // Build the filter criteria based on query parameters
-     if (req.query.ram) {
-       filterCriteria["computerProperty.ram"] = {
-         $regex: createRegex(req.query.ram)
-       };
-     }
-     if (req.query.price) {
-       filterCriteria["computerProperty.price"] = {
-         $regex: createRegex(req.query.price)
-       };
-     }
-     if (req.query.brand) {
-       filterCriteria["computerProperty.brand"] = {
-         $regex: createRegex(req.query.brand)
-       };
-     }
-     if (req.query.drive) {
-       filterCriteria["computerProperty.drive"] = {
-         $regex: createRegex(req.query.drive)
-       };
-     }
+    // Helper function to clean up brand and price values
+    const cleanUpValue = (value) => {
+      if (!value) return;
+      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase(); // Remove spaces, commas, and lowercase
+    };
 
-     console.log("Filter Criteria:", filterCriteria); // Debugging line
-     const products = await Product.find(filterCriteria);
-     res.status(200).json({ success: true, data: products });
-   } catch (error) {
-    console.error("error:", error.message);
-    res.status(500).json({ success: false, message: 'Server Error' });
+    // Build the filter criteria based on query parameters
+    if (req.query.ram) {
+      filterCriteria["computerProperty.ram"] = {
+        $regex: createNumberRegex(req.query.ram)
+      };
+    }
+    if (req.query.drive) {
+      filterCriteria["computerProperty.drive"] = {
+        $regex: createNumberRegex(req.query.drive)
+      };
+    }
+    if (req.query.brand) {
+      filterCriteria["computerProperty.brand"] = {
+        $regex: new RegExp(cleanUpValue(req.query.brand), "i") // Case-insensitive brand match
+      };
+    }
+    if (req.query.price) {
+      filterCriteria["computerProperty.price"] = {
+        $regex: new RegExp(cleanUpValue(req.query.price)) // Match price after removing commas and spaces
+      };
+    }
+
+    console.log("Filter Criteria:", filterCriteria); // Debugging line
+    const products = await Product.find(filterCriteria);
+    res.status(200).json({ success: true, data: products });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 
 
 
