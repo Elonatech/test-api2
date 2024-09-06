@@ -138,20 +138,20 @@ const getProductsByFilter = async (req, res) => {
     // Initialize filter criteria
     let filterCriteria = { category: "Computer" }; // Always filter by "Computer"
 
-    // Helper function to extract numbers and create a regex pattern
+    // Helper function to clean up values (brand, price, etc.)
+    const cleanUpValue = (value) => {
+      if (!value) return;
+      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase(); // Remove spaces, commas, and lowercase
+    };
+
+    // Helper function to extract numbers
     const createNumberRegex = (value) => {
       if (!value) return;
       const cleanedValue = value.replace(/\D/g, ""); // Extract numeric part
       return new RegExp(`\\b${cleanedValue}\\b`, "i"); // Match the number as a whole word
     };
 
-    // Helper function to clean up brand and price values
-    const cleanUpValue = (value) => {
-      if (!value) return;
-      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase(); // Remove spaces, commas, and lowercase
-    };
-
-    // Build the filter criteria based on query parameters
+    // Build filter criteria based on query parameters
     if (req.query.ram) {
       filterCriteria["computerProperty.ram"] = {
         $regex: createNumberRegex(req.query.ram)
@@ -162,19 +162,40 @@ const getProductsByFilter = async (req, res) => {
         $regex: createNumberRegex(req.query.drive)
       };
     }
-      if (req.query.brand) {
-        filterCriteria["brand"] = {
-          $regex: new RegExp(cleanUpValue(req.query.brand), "i") // Case-insensitive and space-removed brand match
-        };
-      }
-    if (req.query.price) {
-      filterCriteria["computerProperty.price"] = {
-        $regex: new RegExp(cleanUpValue(req.query.price)) // Match price after removing commas and spaces
+    if (req.query.brand) {
+      filterCriteria["brand"] = {
+        $regex: new RegExp(cleanUpValue(req.query.brand), "i") // Case-insensitive and space-removed brand match
       };
     }
 
+    // Convert price to number and set price range filter
+    let minPrice = parseFloat(req.query.minPrice) || 0;
+    let maxPrice = parseFloat(req.query.maxPrice) || Infinity;
+
+    // Add price range to filter criteria
+    if (minPrice || maxPrice !== Infinity) {
+      filterCriteria["computerProperty.price"] = {
+        $gte: minPrice,
+        $lte: maxPrice
+      };
+    }
+
+    // Get products based on filter criteria
     const products = await Product.find(filterCriteria);
-    res.status(200).json({ success: true, data: products });
+
+    // Calculate min and max price from products for dynamic pricing
+    const prices = products.map(
+      (product) => parseFloat(product.computerProperty.price) || 0
+    );
+    const dynamicMinPrice = Math.min(...prices);
+    const dynamicMaxPrice = Math.max(...prices);
+
+    res.status(200).json({
+      success: true,
+      data: products,
+      minPrice: dynamicMinPrice,
+      maxPrice: dynamicMaxPrice
+    });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
