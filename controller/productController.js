@@ -170,45 +170,43 @@ const getProductsByFilter = async (req, res) => {
       };
     }
 
-    // Fetch filtered products
-    const filteredProducts = await Product.find(filterCriteria);
+    // Fetch filtered products without price range filter
+    let filteredProducts = await Product.find(filterCriteria);
 
     // Handle empty result case
     if (filteredProducts.length === 0) {
       return res.status(200).json({
         success: true,
         data: [], // Return empty array if no products match
-        message: "Sorry, no product found with this criteria😔.",
+        message: "Sorry, no product found with this criteria.",
         suggestion:
-          "please check computer page to explore more amazing products."
+          "Go back to the computer page to explore more amazing products."
       });
     }
 
     // Extract min and max prices if products are found
     const prices = filteredProducts
-      .map((product) => parseFloat(product.computerProperty.price))
+      .map((product) => parseFloat(product.computerProperty.price) || 0)
       .filter((price) => price > 0); // Exclude non-positive prices
 
-    const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 1;
-    const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 100000000;
+    const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
     // Add price range filter if specified
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
+    // Filter products by price range
     if (minPrice <= maxPrice) {
-      filterCriteria["computerProperty.price"] = {
-        $gte: minPrice,
-        $lte: maxPrice
-      };
+      filteredProducts = filteredProducts.filter((product) => {
+        const price = parseFloat(product.computerProperty.price) || 0;
+        return price >= minPrice && price <= maxPrice;
+      });
     }
-
-    // Fetch final products with combined criteria
-    const finalProducts = await Product.find(filterCriteria);
 
     res.status(200).json({
       success: true,
-      data: finalProducts,
+      data: filteredProducts,
       minPrice: dynamicMinPrice,
       maxPrice: dynamicMaxPrice
     });
