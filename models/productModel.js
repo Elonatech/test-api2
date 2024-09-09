@@ -2,61 +2,80 @@ const mongoose = require("mongoose");
 
 const computerPropertySchema = mongoose.Schema({
   series: {
-    type: String
+    type: String,
+ 
   },
   model: {
-    type: String
+    type: String,
+  
   },
   weight: {
-    type: String
+    type: String,
+
   },
   dimension: {
-    type: String
+    type: String,
+ 
   },
   item: {
-    type: String
+    type: String,
+
   },
   color: {
-    type: String
+    type: String,
+ 
   },
   hardware: {
-    type: String
+    type: String,
+
   },
   os: {
-    type: String
+    type: String,
+   
   },
   processor: {
-    type: String
+    type: String,
+  
   },
   number: {
-    type: String
+    type: Number,
+  
   },
   memory: {
-    type: String
+    type: String,
+  
   },
   ram: {
-    type: String
+    type: String,
+    required: true
   },
   drive: {
-    type: String
+    type: String,
+    required: true
   },
   display: {
     type: String
+   
   },
   resolution: {
     type: String
+  
   },
   graphics: {
-    type: String
+    type: String,
+  
   },
   voltage: {
     type: String
+   
   },
   battery: {
-    type: String
+    type: String,
+   
   },
   wireless: {
-    type: String
+    type: String,
+
   }
 });
 
@@ -92,6 +111,7 @@ const productSchema = new mongoose.Schema(
     },
 
     computerProperty: [computerPropertySchema],
+    
 
     images: [
       {
