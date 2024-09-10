@@ -135,23 +135,19 @@ const getComputers = async (req, res) => {
 
 const getProductsByFilter = async (req, res) => {
   try {
-    // Initialize filter criteria
     let filterCriteria = { category: "Computer" };
 
-    // Helper function to clean up string values
     const cleanUpValue = (value) => {
       if (!value) return;
-      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase(); // Remove spaces, commas, and lowercase
+      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
     };
 
-    // Helper function to extract numbers
     const createNumberRegex = (value) => {
       if (!value) return;
-      const cleanedValue = value.replace(/\D/g, ""); // Extract numeric part
-      return new RegExp(`\\b${cleanedValue}\\b`, "i"); // Match the number as a whole word
+      const cleanedValue = value.replace(/\D/g, "");
+      return new RegExp(`\\b${cleanedValue}\\b`, "i");
     };
 
-    // Apply filters based on query parameters
     if (req.query.ram) {
       filterCriteria["computerProperty.ram"] = {
         $regex: createNumberRegex(req.query.ram)
@@ -170,52 +166,43 @@ const getProductsByFilter = async (req, res) => {
       };
     }
 
-    // Fetch filtered products without price range filter
-    let filteredProducts = await Product.find(filterCriteria);
-
-    // Handle empty result case
-    if (filteredProducts.length === 0) {
-      return res.status(200).json({
-        success: true,
-        data: [], // Return empty array if no products match
-        message: "Sorry, no product found with this criteria.",
-        suggestion:
-          "Go back to the computer page to explore more amazing products."
-      });
-    }
-
-    // Extract min and max prices if products are found
-    const prices = filteredProducts
-      .map((product) => parseFloat(product.computerProperty.price) || 0)
-      .filter((price) => price > 0); // Exclude non-positive prices
+    const products = await Product.find(filterCriteria);
+    const prices = products
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
 
     const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
-    // Add price range filter if specified
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
-    // Filter products by price range
-    if (minPrice <= maxPrice) {
-      filteredProducts = filteredProducts.filter((product) => {
-        const price = parseFloat(product.computerProperty.price) || 0;
-        return price >= minPrice && price <= maxPrice;
-      });
-    }
+    filterCriteria["price"] = {
+      $gte: minPrice,
+      $lte: maxPrice
+    };
+
+    const filteredProducts = await Product.find(filterCriteria);
+
+    const filteredPrices = filteredProducts
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
+    const updatedMinPrice =
+      filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
+    const updatedMaxPrice =
+      filteredPrices.length > 0 ? Math.max(...filteredPrices) : 0;
 
     res.status(200).json({
       success: true,
       data: filteredProducts,
-      minPrice: dynamicMinPrice,
-      maxPrice: dynamicMaxPrice
+      minPrice: updatedMinPrice,
+      maxPrice: updatedMaxPrice
     });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
-
 
 
 

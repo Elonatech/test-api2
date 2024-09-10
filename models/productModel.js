@@ -89,9 +89,10 @@ const productSchema = new mongoose.Schema(
       type: String
     },
     price: {
-      type: String,
-      required: true
-    },
+  type: Number,
+  required: true,
+  min: [1, 'Price must be at least 1'] 
+},
     odd: {
       type: String
     },
