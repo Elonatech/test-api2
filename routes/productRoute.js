@@ -6,6 +6,8 @@ router.post("/create", productController.createProduct);
 router.get("/", productController.getAllProducts);
 router.get("/computers", productController.getComputers);
 router.get("/filter", productController.getProductsByFilter);
+router.get( "/filter/all", productController.getAllProductsByFilterForAllCategories);
+router.get("/brand", productController.getUniqueBrands)
 router.get("/:id", productController.getProductById);
 router.put("/:id/update", productController.updateProduct);
 router.put("/:id/update/image", productController.updateProductImage);

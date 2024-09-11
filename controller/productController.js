@@ -204,7 +204,145 @@ const getProductsByFilter = async (req, res) => {
   }
 };
 
+const getAllProductsByFilter = async (req, res) => {
+  try {
+    let filterCriteria = { category: "Computer" };
 
+    const cleanUpValue = (value) => {
+      if (!value) return;
+      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
+    };
+
+    const createNumberRegex = (value) => {
+      if (!value) return;
+      const cleanedValue = value.replace(/\D/g, "");
+      return new RegExp(`\\b${cleanedValue}\\b`, "i");
+    };
+
+    if (req.query.ram) {
+      filterCriteria["computerProperty.ram"] = {
+        $regex: createNumberRegex(req.query.ram)
+      };
+    }
+
+    if (req.query.drive) {
+      filterCriteria["computerProperty.drive"] = {
+        $regex: createNumberRegex(req.query.drive)
+      };
+    }
+
+    if (req.query.brand) {
+      filterCriteria["brand"] = {
+        $regex: new RegExp(cleanUpValue(req.query.brand), "i")
+      };
+    }
+
+    const products = await Product.find(filterCriteria);
+    const prices = products
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
+
+    const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+    let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
+    let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
+
+    filterCriteria["price"] = {
+      $gte: minPrice,
+      $lte: maxPrice
+    };
+
+    const filteredProducts = await Product.find(filterCriteria);
+
+    const filteredPrices = filteredProducts
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
+    const updatedMinPrice =
+      filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
+    const updatedMaxPrice =
+      filteredPrices.length > 0 ? Math.max(...filteredPrices) : 0;
+
+    res.status(200).json({
+      success: true,
+      data: filteredProducts,
+      minPrice: updatedMinPrice,
+      maxPrice: updatedMaxPrice
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+const getAllProductsByFilterForAllCategories = async (req, res) => {
+  try {
+    let filterCriteria = {}; // No category filter, so it applies to all products
+
+    const cleanUpValue = (value) => {
+      if (!value) return;
+      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
+    };
+
+
+    if (req.query.brand) {
+      filterCriteria["brand"] = {
+        $regex: new RegExp(cleanUpValue(req.query.brand), "i")
+      };
+    }
+
+    const products = await Product.find(filterCriteria);
+    const prices = products
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
+
+    const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+    let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
+    let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
+
+    filterCriteria["price"] = {
+      $gte: minPrice,
+      $lte: maxPrice
+    };
+
+    const filteredProducts = await Product.find(filterCriteria);
+
+    const filteredPrices = filteredProducts
+      .map((product) => parseFloat(product.price) || 0)
+      .filter((price) => price > 0);
+    const updatedMinPrice =
+      filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
+    const updatedMaxPrice =
+      filteredPrices.length > 0 ? Math.max(...filteredPrices) : 0;
+
+    res.status(200).json({
+      success: true,
+      data: filteredProducts,
+      minPrice: updatedMinPrice,
+      maxPrice: updatedMaxPrice
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+const getUniqueBrands = async (req, res) => {
+  try {
+    // Use 'distinct' to fetch unique brands from the database
+    const uniqueBrands = await Product.distinct("brand");
+
+    res.status(200).json({
+      success: true,
+      brands: uniqueBrands
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
 
 
 const updateProduct = async (req, res, next) => {
@@ -338,6 +476,8 @@ module.exports = {
   createProduct,
   getAllProducts,
   getProductsByFilter,
+  getAllProductsByFilterForAllCategories,
+  getUniqueBrands,
   getProductById,
   getComputers,
   deleteProduct,

@@ -47,11 +47,11 @@ const computerPropertySchema = mongoose.Schema({
   },
   ram: {
     type: String,
-    required: true
+    
   },
   drive: {
     type: String,
-    required: true
+   
   },
   display: {
     type: String
