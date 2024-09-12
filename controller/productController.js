@@ -329,20 +329,80 @@ const getAllProductsByFilterForAllCategories = async (req, res) => {
   }
 };
 
-const getUniqueBrands = async (req, res) => {
+// Assuming this is part of your controller file
+
+// Endpoint to fetch unique brands and min/max price range of all products
+const getUniqueBrandsAndPriceRange = async (req, res) => {
   try {
-    // Use 'distinct' to fetch unique brands from the database
-    const uniqueBrands = await Product.distinct("brand");
+    // Fetch all products to get unique brands and prices
+    const products = await Product.find({});
+
+    // Extract unique brands, normalizing to avoid duplicates caused by case and spaces
+    const uniqueBrands = [
+      ...new Set(products.map((product) => product.brand.trim().toLowerCase())),
+    ];
+
+    // Map the brands back to their original case-sensitive form
+    const displayBrands = uniqueBrands.map((uniqueBrand) =>
+      products.find(
+        (product) => product.brand.trim().toLowerCase() === uniqueBrand
+      ).brand
+    );
+
+    // Extract all prices from products, filtering valid numbers
+    const prices = products.map((product) => parseFloat(product.price) || 0).filter(price => price > 0);
+
+    // Calculate the min and max price from all products
+    const minPrice = prices.length ? Math.min(...prices) : 0;
+    const maxPrice = prices.length ? Math.max(...prices) : 1000000;
 
     res.status(200).json({
       success: true,
-      brands: uniqueBrands
+      brands: displayBrands,
+      minPrice,
+      maxPrice,
     });
   } catch (error) {
     console.error("Error:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+// Endpoint to fetch filtered products based on brand and price range
+const getFilteredProducts = async (req, res) => {
+  try {
+    let filterCriteria = {};
+
+    // Check if a brand filter is applied
+    if (req.query.brand) {
+      filterCriteria["brand"] = {
+        $regex: new RegExp(req.query.brand, "i"),
+      };
+    }
+
+    // Check for price range filters and apply them if provided
+    if (req.query.minPrice && req.query.maxPrice) {
+      filterCriteria["price"] = {
+        $gte: parseFloat(req.query.minPrice),
+        $lte: parseFloat(req.query.maxPrice),
+      };
+    }
+
+    const filteredProducts = await Product.find(filterCriteria);
+
+    res.status(200).json({
+      success: true,
+      data: filteredProducts,
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+
+
+
 
 
 const updateProduct = async (req, res, next) => {
@@ -477,7 +537,8 @@ module.exports = {
   getAllProducts,
   getProductsByFilter,
   getAllProductsByFilterForAllCategories,
-  getUniqueBrands,
+  getUniqueBrandsAndPriceRange,
+  getFilteredProducts,
   getProductById,
   getComputers,
   deleteProduct,
