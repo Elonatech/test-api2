@@ -369,14 +369,16 @@ const getUniqueBrandsAndPriceRange = async (req, res) => {
 };
 
 // Endpoint to fetch filtered products based on brand and price range
+// Endpoint to fetch filtered products based on multiple brands and price range
 const getFilteredProducts = async (req, res) => {
   try {
     let filterCriteria = {};
 
-    // Check if a brand filter is applied
+    // Check if multiple brands are provided
     if (req.query.brand) {
+      const brands = req.query.brand.split(","); // Split the comma-separated brand string into an array
       filterCriteria["brand"] = {
-        $regex: new RegExp(req.query.brand, "i"),
+        $in: brands.map((brand) => new RegExp(brand.trim(), "i")), // Use regex for case-insensitive matching
       };
     }
 
@@ -399,7 +401,6 @@ const getFilteredProducts = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
-
 
 
 
