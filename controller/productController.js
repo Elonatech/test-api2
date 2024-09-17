@@ -148,116 +148,56 @@ const getProductsByFilter = async (req, res) => {
       return new RegExp(`\\b${cleanedValue}\\b`, "i");
     };
 
+    // Filter by RAM
     if (req.query.ram) {
       filterCriteria["computerProperty.ram"] = {
         $regex: createNumberRegex(req.query.ram)
       };
     }
 
+    // Filter by Drive
     if (req.query.drive) {
       filterCriteria["computerProperty.drive"] = {
         $regex: createNumberRegex(req.query.drive)
       };
     }
 
+    // Filter by multiple brands (case-insensitive)
     if (req.query.brand) {
+      const brandArray = req.query.brand
+        .split(",")
+        .map((brand) => cleanUpValue(brand));
       filterCriteria["brand"] = {
-        $regex: new RegExp(cleanUpValue(req.query.brand), "i")
+        $in: brandArray.map((brand) => new RegExp(brand, "i")) // Case-insensitive match for each brand
       };
     }
 
+    // Fetch products that match the brand, RAM, and drive criteria
     const products = await Product.find(filterCriteria);
+
+    // Get all prices from the filtered products
     const prices = products
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
 
+    // Dynamic price range (if no range is provided)
     const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
-    filterCriteria["price"] = {
-      $gte: minPrice,
-      $lte: maxPrice
-    };
-
-    const filteredProducts = await Product.find(filterCriteria);
-
-    const filteredPrices = filteredProducts
-      .map((product) => parseFloat(product.price) || 0)
-      .filter((price) => price > 0);
-    const updatedMinPrice =
-      filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
-    const updatedMaxPrice =
-      filteredPrices.length > 0 ? Math.max(...filteredPrices) : 0;
-
-    res.status(200).json({
-      success: true,
-      data: filteredProducts,
-      minPrice: updatedMinPrice,
-      maxPrice: updatedMaxPrice
+    // Apply price filtering
+    const filteredProducts = products.filter((product) => {
+      const price = parseFloat(product.price);
+      return price >= minPrice && price <= maxPrice;
     });
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-};
 
-const getAllProductsByFilter = async (req, res) => {
-  try {
-    let filterCriteria = { category: "Computer" };
-
-    const cleanUpValue = (value) => {
-      if (!value) return;
-      return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
-    };
-
-    const createNumberRegex = (value) => {
-      if (!value) return;
-      const cleanedValue = value.replace(/\D/g, "");
-      return new RegExp(`\\b${cleanedValue}\\b`, "i");
-    };
-
-    if (req.query.ram) {
-      filterCriteria["computerProperty.ram"] = {
-        $regex: createNumberRegex(req.query.ram)
-      };
-    }
-
-    if (req.query.drive) {
-      filterCriteria["computerProperty.drive"] = {
-        $regex: createNumberRegex(req.query.drive)
-      };
-    }
-
-    if (req.query.brand) {
-      filterCriteria["brand"] = {
-        $regex: new RegExp(cleanUpValue(req.query.brand), "i")
-      };
-    }
-
-    const products = await Product.find(filterCriteria);
-    const prices = products
-      .map((product) => parseFloat(product.price) || 0)
-      .filter((price) => price > 0);
-
-    const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
-
-    let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
-    let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
-
-    filterCriteria["price"] = {
-      $gte: minPrice,
-      $lte: maxPrice
-    };
-
-    const filteredProducts = await Product.find(filterCriteria);
-
+    // Get updated min and max price of the filtered products
     const filteredPrices = filteredProducts
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
+
     const updatedMinPrice =
       filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
     const updatedMaxPrice =
@@ -284,34 +224,42 @@ const getAllProductsByFilterForAllCategories = async (req, res) => {
       return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
     };
 
-
+    // Filter by multiple brands (case-insensitive)
     if (req.query.brand) {
+      const brandArray = req.query.brand
+        .split(",")
+        .map((brand) => cleanUpValue(brand));
       filterCriteria["brand"] = {
-        $regex: new RegExp(cleanUpValue(req.query.brand), "i")
+        $in: brandArray.map((brand) => new RegExp(brand, "i")) // Case-insensitive match for each brand
       };
     }
 
+    // Fetch products that match the brand criteria
     const products = await Product.find(filterCriteria);
+
+    // Get all prices from the filtered products
     const prices = products
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
 
+    // Dynamic price range (if no range is provided)
     const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
-    filterCriteria["price"] = {
-      $gte: minPrice,
-      $lte: maxPrice
-    };
+    // Apply price filtering
+    const filteredProducts = products.filter((product) => {
+      const price = parseFloat(product.price);
+      return price >= minPrice && price <= maxPrice;
+    });
 
-    const filteredProducts = await Product.find(filterCriteria);
-
+    // Get updated min and max price of the filtered products
     const filteredPrices = filteredProducts
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
+
     const updatedMinPrice =
       filteredPrices.length > 0 ? Math.min(...filteredPrices) : 0;
     const updatedMaxPrice =
@@ -328,6 +276,7 @@ const getAllProductsByFilterForAllCategories = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 
 // Assuming this is part of your controller file
 
@@ -370,37 +319,6 @@ const getUniqueBrandsAndPriceRange = async (req, res) => {
 
 // Endpoint to fetch filtered products based on brand and price range
 // Endpoint to fetch filtered products based on multiple brands and price range
-const getFilteredProducts = async (req, res) => {
-  try {
-    let filterCriteria = {};
-
-    // Check if multiple brands are provided
-    if (req.query.brand) {
-      const brands = req.query.brand.split(","); // Split the comma-separated brand string into an array
-      filterCriteria["brand"] = {
-        $in: brands.map((brand) => new RegExp(brand.trim(), "i")), // Use regex for case-insensitive matching
-      };
-    }
-
-    // Check for price range filters and apply them if provided
-    if (req.query.minPrice && req.query.maxPrice) {
-      filterCriteria["price"] = {
-        $gte: parseFloat(req.query.minPrice),
-        $lte: parseFloat(req.query.maxPrice),
-      };
-    }
-
-    const filteredProducts = await Product.find(filterCriteria);
-
-    res.status(200).json({
-      success: true,
-      data: filteredProducts,
-    });
-  } catch (error) {
-    console.error("Error:", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-};
 
 
 
@@ -539,7 +457,6 @@ module.exports = {
   getProductsByFilter,
   getAllProductsByFilterForAllCategories,
   getUniqueBrandsAndPriceRange,
-  getFilteredProducts,
   getProductById,
   getComputers,
   deleteProduct,
