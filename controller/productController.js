@@ -451,6 +451,118 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+//Joseph's code
+const getRelatedProducts = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const relatedProducts = await Product.find({
+      _id: { $ne: product._id },
+      category: product.category
+    }).limit(5);
+
+    res.status(200).json({ success: true, relatedProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const updateRecentlyViewed = async (productId) => {
+  try {
+    const maxRecentlyViewed = 7; // Set the maximum number of recently viewed products
+
+    // Find the existing document or create a new one if it doesn't exist
+    let recentlyViewed = await RecentlyViewed.findOne();
+    if (!recentlyViewed) {
+      recentlyViewed = new RecentlyViewed({ products: [] });
+    }
+
+    // Remove the product if it already exists in the list
+    recentlyViewed.products = recentlyViewed.products.filter(
+      (id) => id.toString() !== productId.toString()
+    );
+
+    // Add the new product to the beginning of the array
+    recentlyViewed.products.unshift(productId);
+
+    // Trim the array to keep only the last 'maxRecentlyViewed' products
+    if (recentlyViewed.products.length > maxRecentlyViewed) {
+      recentlyViewed.products = recentlyViewed.products.slice(
+        0,
+        maxRecentlyViewed
+      );
+    }
+
+    // Save the updated document
+    await recentlyViewed.save();
+
+    console.log(
+      `Current number of recently viewed products: ${recentlyViewed.products.length}`
+    );
+  } catch (error) {
+    console.error("Error updating recently viewed products:", error);
+  }
+};
+
+const getRecentlyViewedProducts = async (req, res) => {
+  try {
+    const recentlyViewed = await RecentlyViewed.findOne().populate("products");
+
+    if (!recentlyViewed) {
+      return res.status(200).json({ recentlyViewedProducts: [] });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, recentlyViewedProducts: recentlyViewed.products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getNextProduct = async (req, res) => {
+  try {
+    const currentProduct = await Product.findById(req.params.id);
+    if (!currentProduct) {
+      return res.status(404).json({ message: "Current product not found" });
+    }
+
+    const productCategory = currentProduct.category;
+
+    const allProducts = await Product.find();
+
+    const reversedProducts = allProducts.reverse();
+
+    const categoryProducts = reversedProducts.filter(
+      (product) => product.category === productCategory
+    );
+
+    const currentIndex = categoryProducts.findIndex(
+      (product) => product._id.toString() === currentProduct._id.toString()
+    );
+    let nextProduct;
+    if (currentIndex !== -1 && currentIndex < categoryProducts.length - 1) {
+      nextProduct = categoryProducts[currentIndex + 1];
+    } else {
+      nextProduct = categoryProducts[0];
+    }
+
+    res.status(200).json({ nextProduct });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -461,5 +573,8 @@ module.exports = {
   getComputers,
   deleteProduct,
   updateProduct,
-  updateProductImage
+  updateProductImage,
+  getRelatedProducts,
+  getRecentlyViewedProducts,
+  getNextProduct
 };
