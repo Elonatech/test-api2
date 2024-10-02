@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const RecentlyViewed =require("../models/recentlyViewesModel")
 const cloudinary = require("../lib/cloudinary");
 
 const createProduct = async (req, res, next) => {
