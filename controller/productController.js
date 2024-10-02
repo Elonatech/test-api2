@@ -571,6 +571,7 @@ module.exports = {
   getUniqueBrandsAndPriceRange,
   getProductById,
   getComputers,
+  updateRecentlyViewed,
   deleteProduct,
   updateProduct,
   updateProductImage,

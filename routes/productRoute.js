@@ -12,5 +12,14 @@ router.get("/:id", productController.getProductById);
 router.put("/:id/update", productController.updateProduct);
 router.put("/:id/update/image", productController.updateProductImage);
 router.delete("/:id", productController.deleteProduct);
+router.get("/:id/next", productController.getNextProduct);
+router.get("/:id/related", productController.getRelatedProducts);
+router.get(
+  "/products/recently-viewed",
+  productController.getRecentlyViewedProducts
+);
+
+
 
 module.exports = router;
+
