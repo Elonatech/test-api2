@@ -15,7 +15,7 @@ router.delete("/:id", productController.deleteProduct);
 router.get("/:id/next", productController.getNextProduct);
 router.get("/:id/related", productController.getRelatedProducts);
 router.get(
-  "/products/recently-viewed",
+  "/recently-viewed",
   productController.getRecentlyViewedProducts
 );
 
