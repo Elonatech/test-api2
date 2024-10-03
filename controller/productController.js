@@ -1,5 +1,7 @@
 const Product = require("../models/productModel");
-const RecentlyViewed =require("../models/recentlyViewesModel")
+const RecentlyViewed = require("../models/recentlyViewesModel");
+
+
 const cloudinary = require("../lib/cloudinary");
 
 const createProduct = async (req, res, next) => {
@@ -453,6 +455,8 @@ const deleteProduct = async (req, res) => {
 };
 
 //Joseph's code
+
+
 const getRelatedProducts = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -471,6 +475,10 @@ const getRelatedProducts = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+
 
 
 const updateRecentlyViewed = async (productId) => {
@@ -510,22 +518,7 @@ const updateRecentlyViewed = async (productId) => {
   }
 };
 
-const getRecentlyViewedProducts = async (req, res) => {
-  try {
-    const recentlyViewed = await RecentlyViewed.findOne().populate("products");
 
-    if (!recentlyViewed) {
-      return res.status(200).json({ recentlyViewedProducts: [] });
-    }
-
-    res
-      .status(200)
-      .json({ success: true, recentlyViewedProducts: recentlyViewed.products });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
 
 const getNextProduct = async (req, res) => {
   try {
@@ -577,6 +570,6 @@ module.exports = {
   updateProduct,
   updateProductImage,
   getRelatedProducts,
-  getRecentlyViewedProducts,
+
   getNextProduct
 };

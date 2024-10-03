@@ -12,6 +12,7 @@ const productRoutes = require("./routes/productRoute");
 const emailRoutes = require("./routes/emailRoute");
 const { connectMongodb } = require("./config/database");
 const pingServer = require("./keepAlive");
+const RecentlyViewed = require("./models/recentlyViewesModel")
 
 
 
@@ -41,6 +42,27 @@ app.get("/", (req, res) => {
   res.send("ELONATECH API RUNNING");
 });
 
+//recent-products routes
+
+app.get("/api/v1/product/products/recently-viewed", async (req, res) => {
+  try {
+    const recentlyViewed = await RecentlyViewed.findOne().populate("products");
+
+    if (!recentlyViewed) {
+      return res.status(200).json({ recentlyViewedProducts: [] });
+    }
+
+    res.status(200).json({
+      success: true,
+      recentlyViewedProducts: recentlyViewed.products
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.get("/api/v1/product/products", productRoutes)
 app.use("/api/v1/auth", adminRoutes);
 app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/product", productRoutes);
