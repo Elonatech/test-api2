@@ -44,23 +44,24 @@ app.get("/", (req, res) => {
 
 //recent-products routes
 
-app.get("/api/v1/product/products/recently-viewed", async (req, res) => {
-  try {
-    const recentlyViewed = await RecentlyViewed.findOne().populate("products");
+// app.get("/api/v1/product/products/recently-viewed", async (req, res) => {
+//   try {
+//     const recentlyViewed = await RecentlyViewed.findOne().populate("products");
 
-    if (!recentlyViewed) {
-      return res.status(200).json({ recentlyViewedProducts: [] });
-    }
+//     if (!recentlyViewed) {
+//       return res.status(200).json({ recentlyViewedProducts: [] });
+//     }
 
-    res.status(200).json({
-      success: true,
-      recentlyViewedProducts: recentlyViewed.products
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+//     res.status(200).json({
+//       success: true,
+//       recentlyViewedProducts: recentlyViewed.products
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
 
 app.get("/api/v1/product/products", productRoutes)
 app.use("/api/v1/auth", adminRoutes);

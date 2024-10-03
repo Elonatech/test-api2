@@ -14,7 +14,7 @@ router.put("/:id/update/image", productController.updateProductImage);
 router.delete("/:id", productController.deleteProduct);
 router.get("/:id/next", productController.getNextProduct);
 router.get("/:id/related", productController.getRelatedProducts);
-// router.get("/recently-viewed", productController.getRecentlyViewedProducts);
+router.get("/products/recently-viewed", productController.getRecentlyViewedProducts);
 
 
 

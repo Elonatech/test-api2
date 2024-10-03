@@ -106,14 +106,14 @@ const getAllProducts = async (req, res, next) => {
   return res.status(200).json({ getAllProducts });
 };
 
-const getProductById = async (req, res) => {
-  const getId = await Product.findById(req.params.id);
-  if (!getId) {
-    return res.status(404).send({ message: "Product Not Found" });
-  }
-  const getProductById = await Product.findById(getId);
-  return res.status(200).json({ getProductById });
-};
+// const getProductById = async (req, res) => {
+//   const getId = await Product.findById(req.params.id);
+//   if (!getId) {
+//     return res.status(404).send({ message: "Product Not Found" });
+//   }
+//   const getProductById = await Product.findById(getId);
+//   return res.status(200).json({ getProductById });
+// };
 
 
 const getComputers = async (req, res) => {
@@ -456,6 +456,35 @@ const deleteProduct = async (req, res) => {
 
 //Joseph's code
 
+const getProductById = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+
+    // Update recently viewed products
+    await updateRecentlyViewed(productId);
+
+    // Get the current count of recently viewed products
+    const recentlyViewed = await RecentlyViewed.findOne();
+    const recentlyViewedCount = recentlyViewed
+      ? recentlyViewed.products.length
+      : 0;
+
+    console.log(
+      `Current number of recently viewed products: ${recentlyViewedCount}`
+    );
+
+    return res.status(200).json({ product });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 const getRelatedProducts = async (req, res) => {
   try {
@@ -477,6 +506,23 @@ const getRelatedProducts = async (req, res) => {
 };
 
 
+const getRecentlyViewedProducts = async (req, res) => {
+  try {
+    const recentlyViewed = await RecentlyViewed.findOne().populate("products");
+
+    if (!recentlyViewed) {
+      return res.status(200).json({ recentlyViewedProducts: [] });
+    }
+
+    res.status(200).json({
+      success: true,
+      recentlyViewedProducts: recentlyViewed.products
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 
@@ -570,6 +616,6 @@ module.exports = {
   updateProduct,
   updateProductImage,
   getRelatedProducts,
-
+getRecentlyViewedProducts,
   getNextProduct
 };
