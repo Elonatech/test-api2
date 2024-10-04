@@ -37,7 +37,7 @@ const jobEmail = async (req, res) =>{
 
 		
 		   const mailOptions = {
-			   from: email,   
+			   from: 'webadmin@elonatech.com.ng',   
 			   to: ["contact@elonatech.com.ng", email],
 			   subject:"Job Application",
 			   html:`<!DOCTYPE html>
@@ -147,7 +147,7 @@ const jobEmail = async (req, res) =>{
 																	   <tr>
 																		   <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																			   <div class="alignment" align="center" style="line-height:10px">
-																				   <div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																				   <div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																			   </div>
 																		   </td>
 																	   </tr>
@@ -756,10 +756,7 @@ const jobEmail = async (req, res) =>{
 																					   <td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																						   <!--[if !vml]><!-->
 																						   <table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																							   <tr>
-																								   <td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																								   <td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																							   </tr>
+						
 																						   </table>
 																					   </td>
 																				   </tr>
@@ -918,7 +915,7 @@ const quoteEmail = async (req, res) =>{
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																	<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -1418,10 +1415,7 @@ const quoteEmail = async (req, res) =>{
 																		<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																			<!--[if !vml]><!-->
 																			<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																				<tr>
-																					<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																					<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																				</tr>
+				
 																			</table>
 																		</td>
 																	</tr>
@@ -1594,7 +1588,7 @@ const mailOptions = {
 															<tr>
 																<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																	<div class="alignment" align="center" style="line-height:10px">
-																		<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																		<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																	</div>
 																</td>
 															</tr>
@@ -2092,10 +2086,7 @@ const mailOptions = {
 																			<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																				<!--[if !vml]><!-->
 																				<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																					<tr>
-																						<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																						<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																					</tr>
+																					
 																				</table>
 																			</td>
 																		</tr>
@@ -2262,7 +2253,7 @@ const mailOptions = {
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																	<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -2694,10 +2685,7 @@ const mailOptions = {
 																		<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																			<!--[if !vml]><!-->
 																			<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																				<tr>
-																					<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																					<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																				</tr>
+																				
 																			</table>
 																		</td>
 																	</tr>
@@ -2863,7 +2851,7 @@ const mailOptions = {
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																	<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -3296,10 +3284,7 @@ const mailOptions = {
 																		<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																			<!--[if !vml]><!-->
 																			<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																				<tr>
-																					<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																					<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																				</tr>
+																				
 																			</table>
 																		</td>
 																	</tr>
@@ -3481,7 +3466,7 @@ const mailOptions = {
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																	<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -3508,7 +3493,7 @@ const mailOptions = {
 <!------------------------------------------------------------------------------------ first name lastname  -------------------------------------------------------------------------- -->
 															<td class="pad" style="padding-left:60px;padding-right:60px;padding-top:60px;">
 																<div style="color:#FFFFFF;font-family:Oxygen, Trebuchet MS, Helvetica, sans-serif;font-size:34px;font-weight:400;line-height:180%;text-align:center;mso-line-height-alt:61.2px;">
-																	<p style="margin: 0; word-break: break-word;"><span><span>Hi, ${firstname}!</span><strong><span>&nbsp;</span></strong></span></p>
+																	<p style="margin: 0; word-break: break-word;"><span><span>Hi, ${firstname} ${lastname}!</span><strong><span>&nbsp;</span></strong></span></p>
 																</div>
 															</td>
 														</tr>
@@ -3902,6 +3887,23 @@ const mailOptions = {
 															</td>
 														</tr>
 													</table>
+													<table class="heading_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<h3 style="margin: 0; color: #000000; direction: ltr; font-family: Oxygen, Trebuchet MS, Helvetica, sans-serif; font-size: 17px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 20.4px;"><span class="tinyMce-placeholder">Phone Number</span></h3>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-2" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+<!--=========================================================== Phone Number ========================================================================================================== -->
+															<td class="pad">
+																<div style="color:#101112;direction:ltr;font-family:Oxygen, Trebuchet MS, Helvetica, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
+																	<p style="margin: 0;">${number}&nbsp;</p>
+																</div>
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
 										</tbody>
@@ -4033,10 +4035,7 @@ const mailOptions = {
 																		<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																			<!--[if !vml]><!-->
 																			<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																				<tr>
-																					<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																					<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																				</tr>
+																				
 																			</table>
 																		</td>
 																	</tr>
@@ -4214,7 +4213,7 @@ const retainerEmail = async (req, res) =>{
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+																	<div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -4848,10 +4847,7 @@ const retainerEmail = async (req, res) =>{
 																		<td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
 																			<!--[if !vml]><!-->
 																			<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-																				<tr>
-																					<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-																					<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-																				</tr>
+																				
 																			</table>
 																		</td>
 																	</tr>
@@ -5027,7 +5023,7 @@ const mailOptions = {
                                                     <tr>
                                                         <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
                                                             <div class="alignment" align="center" style="line-height:10px">
-                                                                <div style="max-width: 279px;"><img src="https://7a76a0b6ba.imgdist.com/pub/bfra/tisvo7rx/gsa/r5u/3wp/elonatech.c608.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
+                                                                <div style="max-width: 279px;"><img src="https://elonatech.com.ng/static/media/elonatech.c6083e7d06b4cbab7d90.png" style="display: block; height: auto; border: 0; width: 100%;" width="279" height="auto"></div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -5596,10 +5592,7 @@ const mailOptions = {
                                                                     <td class="alignment" style="vertical-align: middle; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
                                                                         <!--[if !vml]><!-->
                                                                         <table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; margin-right: -4px; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
-                                                                            <tr>
-                                                                                <td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-                                                                                <td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
-                                                                            </tr>
+                                                                            
                                                                         </table>
                                                                     </td>
                                                                 </tr>
