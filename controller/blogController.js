@@ -25,9 +25,8 @@ const createBlog = async (req, res) => {
 };
 
 // Get All Blogs
-
 const getBlogs = async (req, res) => {
-  const getAllBlogs = await Blog.find();
+  const getAllBlogs = await Blog.find().sort({ createdAt: -1 });
 
   if (!getAllBlogs) {
     return res.status(400).send("Bad request");
@@ -35,19 +34,19 @@ const getBlogs = async (req, res) => {
   return res.status(200).json({ getAllBlogs });
 };
 
-//get blogs by trends
+// Get blogs by trends
 const getTrends = async (req, res) => {
-  const getAllTrends = await Blog.find({category:"trends"});
+  const getAllTrends = await Blog.find({ category: "trends" }).sort({ createdAt: -1 });
 
   if (!getAllTrends) {
     return res.status(400).send("Bad request");
   }
   return res.status(200).json({ getAllTrends });
-
 };
-//get blogs by news
+
+// Get blogs by news
 const getNews = async (req, res) => {
-  const getAllNews = await Blog.find({ category: "news" });
+  const getAllNews = await Blog.find({ category: "news" }).sort({ createdAt: -1 });
 
   if (!getAllNews) {
     return res.status(400).send("Bad request");
