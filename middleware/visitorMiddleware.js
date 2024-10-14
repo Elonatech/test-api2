@@ -4,7 +4,7 @@ const logVisitor = async (req, res, next) => {
   try {
     const visitorData = {
       ipAddress: req.ip,
-      userAgent: req.get("User-Agent")
+      userAgent: req.headers['user-agent'] || 'Unknown User Agent',
     };
 
     await Visitor.create(visitorData);

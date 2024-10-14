@@ -68,7 +68,7 @@ app.use("/api/v1/auth", adminRoutes);
 app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/email", emailRoutes);
-// app.use("/api/v1/visitors", visitorRoutes);
+app.use("/api/v1/visitors", visitorRoutes);
 
 
 // PORT
