@@ -138,7 +138,7 @@ const getComputers = async (req, res) => {
 
 const getProductsByFilter = async (req, res) => {
   try {
-    let filterCriteria = { category: "Computer" };
+    let filterCriteria = { category: req.query.category || "Computer" };
 
     const cleanUpValue = (value) => {
       if (!value) return;

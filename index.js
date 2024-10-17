@@ -63,7 +63,7 @@ app.get("/", (req, res) => {
 // });
 
 
-app.get("/api/v1/product/products", productRoutes)
+// app.get("/api/v1/product/products", productRoutes)
 app.use("/api/v1/auth", adminRoutes);
 app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/product", productRoutes);
