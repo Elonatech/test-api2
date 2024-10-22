@@ -465,8 +465,10 @@ const getProductById = async (req, res) => {
       return res.status(404).json({ message: "Product Not Found" });
     }
 
+    // Update recently viewed products
     await updateRecentlyViewed(productId);
 
+    // Get the current count of recently viewed products
     const recentlyViewed = await RecentlyViewed.findOne();
     const recentlyViewedCount = recentlyViewed
       ? recentlyViewed.products.length
@@ -476,25 +478,12 @@ const getProductById = async (req, res) => {
       `Current number of recently viewed products: ${recentlyViewedCount}`
     );
 
-    const userAgent = req.headers['user-agent'];
-    const socialMediaBots = ['facebookexternalhit', 'Twitterbot', 'LinkedInBot'];
-    const isSocialMediaBot = socialMediaBots.some(bot => userAgent.includes(bot));
-
-    const firstImage = product.images && product.images.length > 0 
-      ? product.images[0] 
-      : 'https://res.cloudinary.com/davecz6pb/image/upload/v1729247773/products/zoia4ggzswwqzp9hifhe.jpg';
-
-    if (isSocialMediaBot) {
-      return res.render('product', { product, firstImage });
-    } else {
-      return res.status(200).json({ product });
-    }
+    return res.status(200).json({ product });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
   }
 };
-
 
 
 const getRelatedProducts = async (req, res) => {
