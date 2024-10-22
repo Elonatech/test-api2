@@ -42,6 +42,9 @@ app.get("/", (req, res) => {
   res.send("ELONATECH API RUNNING");
 });
 
+const generateMetaTags = require('./middleware/metaTagsMiddleware');
+app.use(generateMetaTags);
+
 //recent-products routes
 
 // app.get("/api/v1/product/products/recently-viewed", async (req, res) => {

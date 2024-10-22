@@ -1,40 +1,38 @@
-// backend/middleware/metaTagsMiddleware.js
-const Product = require('../models/productModel');
-const { sanitizeDescription, generateProductMetaTags } = require('../utils/metaTagsHelper');
+const Product = require('../models/productModel'); // Adjust path as needed
 
 const generateMetaTags = async (req, res, next) => {
-  // Only process product routes
   if (!req.url.startsWith('/api/v1/product/')) {
     return next();
   }
 
   try {
     const productId = req.params.id;
-    if (!productId) {
-      return next();
-    }
-
     const product = await Product.findById(productId);
+    
     if (!product) {
       return next();
     }
 
-    // Get base URL from environment variables
-    const baseUrl = process.env.FRONTEND_URL || 'https://elonatech-official-website.vercel.app';
-    
-    // Generate meta tags using helper
-    const metaData = generateProductMetaTags(product, baseUrl);
-    
-    // Store in res.locals for access in route handler
-    res.locals.metaTags = metaData;
-    
-    // Log for debugging
-    console.log('Meta tags generated for product:', productId);
+    // Generate meta tags
+    const metaTags = `
+      <title>${product.name} - Elonatech Nigeria Limited</title>
+      <meta name="description" content="${product.description.substring(0, 155)}">
+      <meta property="og:title" content="${product.name}">
+      <meta property="og:description" content="${product.description.substring(0, 155)}">
+      <meta property="og:image" content="${product.images[0]?.url || ''}">
+      <meta property="og:url" content="https://elonatech-official-website.vercel.app/product/${product._id}">
+      <meta property="og:type" content="product">
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="${product.name}">
+      <meta name="twitter:description" content="${product.description.substring(0, 155)}">
+      <meta name="twitter:image" content="${product.images[0]?.url || ''}">
+    `;
+
+    res.locals.metaTags = metaTags;
   } catch (error) {
     console.error('Meta tags generation error:', error);
-    // Continue without meta tags rather than failing the request
   }
   next();
 };
 
-module.exports = generateMetaTags;
+module.exports = generateMetaTags
