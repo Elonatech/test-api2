@@ -482,7 +482,7 @@ const getProductById = async (req, res) => {
 
     const firstImage = product.images && product.images.length > 0 
       ? product.images[0] 
-      : 'default-image-url.jpg';
+      : 'https://res.cloudinary.com/davecz6pb/image/upload/v1729247773/products/zoia4ggzswwqzp9hifhe.jpg';
 
     if (isSocialMediaBot) {
       return res.render('product', { product, firstImage });
