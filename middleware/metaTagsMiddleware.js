@@ -29,6 +29,7 @@ const generateMetaTags = async (req, res, next) => {
     `;
 
     res.locals.metaTags = metaTags;
+    console.log(metaTags, "eyuuieieroirjfo")
   } catch (error) {
     console.error('Meta tags generation error:', error);
   }

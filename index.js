@@ -13,6 +13,7 @@ const emailRoutes = require("./routes/emailRoute");
 const { connectMongodb } = require("./config/database");
 const pingServer = require("./keepAlive");
 const RecentlyViewed = require("./models/recentlyViewesModel")
+const generateMetaTags = require('./middleware/metaTagsMiddleware');
 
 
 
@@ -20,6 +21,7 @@ const RecentlyViewed = require("./models/recentlyViewesModel")
 // JSON
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: "true" }));
+app.use(generateMetaTags);
 
 // CORS
 app.use(
@@ -42,8 +44,7 @@ app.get("/", (req, res) => {
   res.send("ELONATECH API RUNNING");
 });
 
-const generateMetaTags = require('./middleware/metaTagsMiddleware');
-app.use(generateMetaTags);
+
 
 //recent-products routes
 

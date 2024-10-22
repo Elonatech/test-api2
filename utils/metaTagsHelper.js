@@ -8,7 +8,7 @@ const sanitizeDescription = (description) => {
   
   const generateProductMetaTags = (product, baseUrl) => {
     const productUrl = `${baseUrl}/product/${product._id}`;
-    const imageUrl = product.images?.[0]?.url || `${baseUrl}/default-product-image.jpg`;
+    const imageUrl = product.images?.[0]?.url || `${baseUrl}/https://res.cloudinary.com/elonatech/image/upload/v1709806953/productHeaderPage/products_printers_tfiyzc.jpg`;
     const description = sanitizeDescription(product.description);
   
     return {
