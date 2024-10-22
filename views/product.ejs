@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= product.name %> - Elonatech</title>
+  <meta name="description" content="<%= product.description %>">
+  <meta property="og:title" content="<%= product.name %>">
+  <meta property="og:description" content="<%= product.description %>">
+  <meta property="og:image" content="<%= product.imageURL %>">
+  <meta property="og:url" content="https://elonatech-official-website.vercel.app/product/<%= product._id %>">
+</head>
+<body>
+  <h1><%= product.name %></h1>
+  <p><%= product.description %></p>
+  <img src="<%= product.imageURL %>" alt="<%= product.name %>">
+  <!-- You can add more product details here as needed -->
+</body>
+</html>
