@@ -106,14 +106,6 @@ const getAllProducts = async (req, res, next) => {
   return res.status(200).json({ getAllProducts });
 };
 
-// const getProductById = async (req, res) => {
-//   const getId = await Product.findById(req.params.id);
-//   if (!getId) {
-//     return res.status(404).send({ message: "Product Not Found" });
-//   }
-//   const getProductById = await Product.findById(getId);
-//   return res.status(200).json({ getProductById });
-// };
 
 
 const getComputers = async (req, res) => {
@@ -320,8 +312,7 @@ const getUniqueBrandsAndPriceRange = async (req, res) => {
   }
 };
 
-// Endpoint to fetch filtered products based on brand and price range
-// Endpoint to fetch filtered products based on multiple brands and price range
+
 
 
 
@@ -456,11 +447,40 @@ const deleteProduct = async (req, res) => {
 
 //Joseph's code
 
+// const getProductById = async (req, res) => {
+//   try {
+//     const productId = req.params.id;
+
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(404).json({ message: "Product Not Found" });
+//     }
+
+//     // Update recently viewed products
+//     await updateRecentlyViewed(productId);
+
+//     // Get the current count of recently viewed products
+//     const recentlyViewed = await RecentlyViewed.findOne();
+//     const recentlyViewedCount = recentlyViewed
+//       ? recentlyViewed.products.length
+//       : 0;
+
+//     console.log(
+//       `Current number of recently viewed products: ${recentlyViewedCount}`
+//     );
+
+//     return res.status(200).json({ product });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 const getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
-
     const product = await Product.findById(productId);
+    
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });
     }
@@ -468,19 +488,19 @@ const getProductById = async (req, res) => {
     // Update recently viewed products
     await updateRecentlyViewed(productId);
 
-    // Get the current count of recently viewed products
-    const recentlyViewed = await RecentlyViewed.findOne();
-    const recentlyViewedCount = recentlyViewed
-      ? recentlyViewed.products.length
-      : 0;
+    // Get meta tags from middleware
+    const metaData = res.locals.metaTags || {};
 
-    console.log(
-      `Current number of recently viewed products: ${recentlyViewedCount}`
-    );
+    const response = {
+      product,
+      metaTags: metaData.metaTags,
+      jsonLd: metaData.jsonLd,
+      title: metaData.title
+    };
 
-    return res.status(200).json({ product });
+    return res.status(200).json(response);
   } catch (error) {
-    console.error(error);
+    console.error('Product fetch error:', error);
     return res.status(500).json({ message: "Server error" });
   }
 };

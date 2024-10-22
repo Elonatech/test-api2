@@ -3,7 +3,7 @@ const https = require("https");
 const url = require("url");
 
 // Use a default URL if BASEURL is not defined
-const baseUrl = process.env.BASEURL || "http://localhost:8000";
+const baseUrl = process.env.BASEURL || "http://localhost:8100";
 
 const pingServer = () => {
   // Check if baseUrl is defined before making the request
