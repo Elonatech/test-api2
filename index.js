@@ -13,6 +13,8 @@ const emailRoutes = require("./routes/emailRoute");
 const { connectMongodb } = require("./config/database");
 const pingServer = require("./keepAlive");
 const RecentlyViewed = require("./models/recentlyViewesModel")
+const path = require('path');
+const prerenderMiddleware = require('./middleware/prerender');
 
 
 
@@ -42,6 +44,16 @@ app.get("/", (req, res) => {
   res.send("ELONATECH API RUNNING");
 });
 
+
+app.use(prerenderMiddleware);
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Handle React routing
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 //recent-products routes
 
 // app.get("/api/v1/product/products/recently-viewed", async (req, res) => {
