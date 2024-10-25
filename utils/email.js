@@ -3354,7 +3354,7 @@ if (!notes){
 
 const mailOptions = {
     from: email,   
-    to:"billing@elonatech.com.ng",
+    to:["billing@elonatech.com.ng", email],
 	cc: email,
     subject:"Check Out",
     html: `
