@@ -52,4 +52,24 @@ const adminLogin = async (req, res) => {
     .json({ message: "Login Successful", email: admin.email, access: token });
 };
 
-module.exports = { adminRegister, adminLogin };
+const verifyAdmin = async (req, res) => {
+  try {
+    // Verify the token
+    const decoded = req.user;
+
+    // Find the admin based on the decoded ID
+    const admin = await Admin.findById(decoded.id);
+
+    if (!admin) {
+      return res.status(404).json({ isAdmin: false, message: "Admin not found" });
+    }
+
+    // Return the admin status
+    return res.status(200).json({ isAdmin: true });
+  } catch (error) {
+    console.error("Error verifying admin:", error);
+    return res.status(500).json({ isAdmin: false, message: "Error verifying admin" });
+  }
+};
+
+module.exports = { adminRegister, adminLogin, verifyAdmin };
