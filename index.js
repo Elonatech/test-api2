@@ -14,6 +14,8 @@ const { connectMongodb } = require("./config/database");
 const pingServer = require("./keepAlive");
 const RecentlyViewed = require("./models/recentlyViewesModel");
 const Product = require("./models/productModel");
+const crawlerMiddleware = require('./middleware/crawlerMiddleware');
+const metaTagsMiddleware = require('./middleware/metaTagsMiddleware');
 
 // JSON
 app.use(express.json({ limit: "100mb" }));
@@ -33,6 +35,8 @@ connectMongodb();
 
 // Visitor Tracking Middleware
 app.use(logVisitor);
+app.use(crawlerMiddleware);
+app.use(metaTagsMiddleware);
 
 // Social Media Crawler Middleware - Place before routes
 app.use(async (req, res, next) => {

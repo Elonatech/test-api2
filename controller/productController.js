@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const RecentlyViewed = require("../models/recentlyViewesModel");
+const generateMetaHtml = require('../utils/generateMetaHtml');
 
 
 const cloudinary = require("../lib/cloudinary");
@@ -456,27 +457,53 @@ const deleteProduct = async (req, res) => {
 
 //Joseph's code
 
+// const getProductById = async (req, res) => {
+//   try {
+//     const productId = req.params.id;
+
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(404).json({ message: "Product Not Found" });
+//     }
+
+//     // Update recently viewed products
+//     await updateRecentlyViewed(productId);
+
+//     // Get the current count of recently viewed products
+//     const recentlyViewed = await RecentlyViewed.findOne();
+//     const recentlyViewedCount = recentlyViewed
+//       ? recentlyViewed.products.length
+//       : 0;
+
+//     console.log(
+//       `Current number of recently viewed products: ${recentlyViewedCount}`
+//     );
+
+//     return res.status(200).json({ product });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 const getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
-
     const product = await Product.findById(productId);
+
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });
     }
 
-    // Update recently viewed products
+    if (req.isCrawler) {
+      const html = generateMetaHtml(product);
+      return res.send(html);
+    }
+
     await updateRecentlyViewed(productId);
 
-    // Get the current count of recently viewed products
     const recentlyViewed = await RecentlyViewed.findOne();
-    const recentlyViewedCount = recentlyViewed
-      ? recentlyViewed.products.length
-      : 0;
-
-    console.log(
-      `Current number of recently viewed products: ${recentlyViewedCount}`
-    );
+    const recentlyViewedCount = recentlyViewed ? recentlyViewed.products.length : 0;
 
     return res.status(200).json({ product });
   } catch (error) {
