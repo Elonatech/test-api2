@@ -16,6 +16,8 @@ const RecentlyViewed = require("./models/recentlyViewesModel");
 const Product = require("./models/productModel");
 const crawlerMiddleware = require('./middleware/crawlerMiddleware');
 const metaTagsMiddleware = require('./middleware/metaTagsMiddleware');
+const commentRoutes = require('./routes/blogCommentRoute');
+const replyRoutes = require('./routes/blogCommentRoute');
 
 // JSON
 app.use(express.json({ limit: "100mb" }));
@@ -105,6 +107,8 @@ app.use("/api/v1/blog", blogRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/email", emailRoutes);
 app.use("/api/v1/visitors", visitorRoutes);
+app.use('/api/v1', commentRoutes);
+app.use('/api/v1', replyRoutes);
 
 // PORT
 app.listen(PORT, () => {
