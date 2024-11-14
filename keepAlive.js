@@ -28,7 +28,7 @@ const pingServer = () => {
     });
 };
 
-// Ping the server every 20 minutes
-setInterval(pingServer, 20 * 60 * 1000);
+// Ping the server every 10 minutes
+setInterval(pingServer, 10 * 60 * 1000);
 
 module.exports = pingServer;
