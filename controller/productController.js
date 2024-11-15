@@ -1,6 +1,7 @@
 const Product = require("../models/productModel");
 const RecentlyViewed = require("../models/recentlyViewesModel");
 const generateMetaHtml = require('../utils/generateMetaHtml');
+const mongoose = require("mongoose");
 
 
 const cloudinary = require("../lib/cloudinary");
@@ -107,15 +108,6 @@ const getAllProducts = async (req, res, next) => {
   return res.status(200).json({ getAllProducts });
 };
 
-// const getProductById = async (req, res) => {
-//   const getId = await Product.findById(req.params.id);
-//   if (!getId) {
-//     return res.status(404).send({ message: "Product Not Found" });
-//   }
-//   const getProductById = await Product.findById(getId);
-//   return res.status(200).json({ getProductById });
-// };
-
 
 const getComputers = async (req, res) => {
   try {
@@ -152,52 +144,44 @@ const getProductsByFilter = async (req, res) => {
       return new RegExp(`\\b${cleanedValue}\\b`, "i");
     };
 
-    // Filter by RAM
     if (req.query.ram) {
       filterCriteria["computerProperty.ram"] = {
         $regex: createNumberRegex(req.query.ram)
       };
     }
 
-    // Filter by Drive
     if (req.query.drive) {
       filterCriteria["computerProperty.drive"] = {
         $regex: createNumberRegex(req.query.drive)
       };
     }
 
-    // Filter by multiple brands (case-insensitive)
     if (req.query.brand) {
       const brandArray = req.query.brand
         .split(",")
         .map((brand) => cleanUpValue(brand));
       filterCriteria["brand"] = {
-        $in: brandArray.map((brand) => new RegExp(brand, "i")) // Case-insensitive match for each brand
+        $in: brandArray.map((brand) => new RegExp(brand, "i"))
       };
     }
 
-    // Fetch products that match the brand, RAM, and drive criteria
     const products = await Product.find(filterCriteria);
 
-    // Get all prices from the filtered products
     const prices = products
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
 
-    // Dynamic price range (if no range is provided)
     const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
-    // Apply price filtering
     const filteredProducts = products.filter((product) => {
       const price = parseFloat(product.price);
       return price >= minPrice && price <= maxPrice;
     });
 
-    // Get updated min and max price of the filtered products
     const filteredPrices = filteredProducts
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
@@ -221,45 +205,39 @@ const getProductsByFilter = async (req, res) => {
 
 const getAllProductsByFilterForAllCategories = async (req, res) => {
   try {
-    let filterCriteria = {}; // No category filter, so it applies to all products
+    let filterCriteria = {};
 
     const cleanUpValue = (value) => {
       if (!value) return;
       return value.replace(/\s+/g, "").replace(/,/g, "").toLowerCase();
     };
 
-    // Filter by multiple brands (case-insensitive)
     if (req.query.brand) {
       const brandArray = req.query.brand
         .split(",")
         .map((brand) => cleanUpValue(brand));
       filterCriteria["brand"] = {
-        $in: brandArray.map((brand) => new RegExp(brand, "i")) // Case-insensitive match for each brand
+        $in: brandArray.map((brand) => new RegExp(brand, "i"))
       };
     }
 
-    // Fetch products that match the brand criteria
     const products = await Product.find(filterCriteria);
 
-    // Get all prices from the filtered products
     const prices = products
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
 
-    // Dynamic price range (if no range is provided)
     const dynamicMinPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const dynamicMaxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
     let minPrice = parseFloat(req.query.minPrice) || dynamicMinPrice;
     let maxPrice = parseFloat(req.query.maxPrice) || dynamicMaxPrice;
 
-    // Apply price filtering
     const filteredProducts = products.filter((product) => {
       const price = parseFloat(product.price);
       return price >= minPrice && price <= maxPrice;
     });
 
-    // Get updated min and max price of the filtered products
     const filteredPrices = filteredProducts
       .map((product) => parseFloat(product.price) || 0)
       .filter((price) => price > 0);
@@ -282,30 +260,20 @@ const getAllProductsByFilterForAllCategories = async (req, res) => {
 };
 
 
-// Assuming this is part of your controller file
-
-// Endpoint to fetch unique brands and min/max price range of all products
 const getUniqueBrandsAndPriceRange = async (req, res) => {
   try {
-    // Fetch all products to get unique brands and prices
     const products = await Product.find({});
 
-    // Extract unique brands, normalizing to avoid duplicates caused by case and spaces
     const uniqueBrands = [
       ...new Set(products.map((product) => product.brand.trim().toLowerCase())),
     ];
 
-    // Map the brands back to their original case-sensitive form
     const displayBrands = uniqueBrands.map((uniqueBrand) =>
       products.find(
         (product) => product.brand.trim().toLowerCase() === uniqueBrand
       ).brand
     );
-
-    // Extract all prices from products, filtering valid numbers
     const prices = products.map((product) => parseFloat(product.price) || 0).filter(price => price > 0);
-
-    // Calculate the min and max price from all products
     const minPrice = prices.length ? Math.min(...prices) : 0;
     const maxPrice = prices.length ? Math.max(...prices) : 1000000;
 
@@ -320,13 +288,6 @@ const getUniqueBrandsAndPriceRange = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
-
-// Endpoint to fetch filtered products based on brand and price range
-// Endpoint to fetch filtered products based on multiple brands and price range
-
-
-
-
 
 const updateProduct = async (req, res, next) => {
   try {
@@ -455,29 +416,24 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-//Joseph's code
-
 // const getProductById = async (req, res) => {
 //   try {
 //     const productId = req.params.id;
-
 //     const product = await Product.findById(productId);
+
 //     if (!product) {
 //       return res.status(404).json({ message: "Product Not Found" });
 //     }
 
-//     // Update recently viewed products
+//     if (req.isCrawler) {
+//       const html = generateMetaHtml(product);
+//       return res.send(html);
+//     }
+
 //     await updateRecentlyViewed(productId);
 
-//     // Get the current count of recently viewed products
 //     const recentlyViewed = await RecentlyViewed.findOne();
-//     const recentlyViewedCount = recentlyViewed
-//       ? recentlyViewed.products.length
-//       : 0;
-
-//     console.log(
-//       `Current number of recently viewed products: ${recentlyViewedCount}`
-//     );
+//     const recentlyViewedCount = recentlyViewed ? recentlyViewed.products.length : 0;
 
 //     return res.status(200).json({ product });
 //   } catch (error) {
@@ -486,10 +442,50 @@ const deleteProduct = async (req, res) => {
 //   }
 // };
 
+
+// const getProductById = async (req, res) => {
+//   try {
+//     const identifier = req.params.id;
+//     let product;
+
+//     if (mongoose.Types.ObjectId.isValid(identifier)) {
+//       product = await Product.findById(identifier);
+//     } else {
+//       product = await Product.findOne({ slug: identifier });
+//     }
+
+//     if (!product) {
+//       return res.status(404).json({ message: "Product Not Found" });
+//     }
+
+//     if (req.isCrawler) {
+//       const html = generateMetaHtml(product);
+//       return res.send(html);
+//     }
+
+//     await updateRecentlyViewed(product._id);
+
+//     const recentlyViewed = await RecentlyViewed.findOne();
+//     const recentlyViewedCount = recentlyViewed ? recentlyViewed.products.length : 0;
+
+//     return res.status(200).json({ product });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
 const getProductById = async (req, res) => {
   try {
-    const productId = req.params.id;
-    const product = await Product.findById(productId);
+    const identifier = req.params.id;
+    let product;
+
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+      product = await Product.findById(identifier);
+    } else {
+      product = await Product.findOne({ slug: identifier });
+    }
 
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });
@@ -500,7 +496,7 @@ const getProductById = async (req, res) => {
       return res.send(html);
     }
 
-    await updateRecentlyViewed(productId);
+    await updateRecentlyViewed(product._id);
 
     const recentlyViewed = await RecentlyViewed.findOne();
     const recentlyViewedCount = recentlyViewed ? recentlyViewed.products.length : 0;
@@ -556,31 +552,23 @@ const getRecentlyViewedProducts = async (req, res) => {
 
 const updateRecentlyViewed = async (productId) => {
   try {
-    const maxRecentlyViewed = 7; // Set the maximum number of recently viewed products
+    const maxRecentlyViewed = 7;
 
-    // Find the existing document or create a new one if it doesn't exist
     let recentlyViewed = await RecentlyViewed.findOne();
     if (!recentlyViewed) {
       recentlyViewed = new RecentlyViewed({ products: [] });
     }
-
-    // Remove the product if it already exists in the list
     recentlyViewed.products = recentlyViewed.products.filter(
       (id) => id.toString() !== productId.toString()
     );
-
-    // Add the new product to the beginning of the array
     recentlyViewed.products.unshift(productId);
 
-    // Trim the array to keep only the last 'maxRecentlyViewed' products
     if (recentlyViewed.products.length > maxRecentlyViewed) {
       recentlyViewed.products = recentlyViewed.products.slice(
         0,
         maxRecentlyViewed
       );
     }
-
-    // Save the updated document
     await recentlyViewed.save();
 
     console.log(

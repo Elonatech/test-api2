@@ -1,5 +1,37 @@
 const mongoose = require("mongoose");
 
+
+function generateSlug(name) {
+  return name
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')        
+    .replace(/[^\w\-]+/g, '')   
+    .replace(/\-\-+/g, '-')    
+    .replace(/^-+/, '')          
+    .replace(/-+$/, '');         
+}
+
+async function generateUniqueSlug(name, existingId = null) {
+  let slug = generateSlug(name);
+  let counter = 1;
+  let uniqueSlug = slug;
+  
+  while (true) {
+    const existingProduct = await mongoose.model('Product', productSchema).findOne({ 
+      slug: uniqueSlug,
+      _id: { $ne: existingId ? mongoose.Types.ObjectId(existingId) : null }
+    });
+    
+    if (!existingProduct) {
+      return uniqueSlug;
+    }
+    
+    uniqueSlug = `${slug}-${counter}`;
+    counter++;
+  }
+}
+
 const computerPropertySchema = mongoose.Schema({
   series: {
     type: String,
@@ -38,7 +70,7 @@ const computerPropertySchema = mongoose.Schema({
   
   },
   number: {
-    type: Number,
+    type: String,
   
   },
   memory: {
@@ -84,6 +116,11 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true
     },
     description: {
       type: String
@@ -134,6 +171,13 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+productSchema.pre('save', async function(next) {
+  if (!this.slug || this.isModified('name')) {
+    this.slug = await generateUniqueSlug(this.name, this._id);
+  }
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 
