@@ -35,7 +35,7 @@ async function generateUniqueSlug(name, existingId = null) {
 
 const migrateProductSlugs = async () => {
   try {
-    await mongoose.connect('mongodb+srv://joshuapatrick:FioqMPgoIXwemAe0@cluster0.rek1m.mongodb.net/Elonatech');
+    await mongoose.connect(process.env.MONGO_URI);
     
     const products = await Product.find({ slug: { $exists: false } });
     console.log(`Found ${products.length} products without slugs`);
