@@ -4,7 +4,7 @@ const Blog = require("../models/blogModel");
 
 const addSlugsToExistingBlogs = async () => {
   try {
-    await mongoose.connect("mongodb+srv://joshuapatrick:FioqMPgoIXwemAe0@cluster0.rek1m.mongodb.net/Elonatech", {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
