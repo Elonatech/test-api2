@@ -2,11 +2,9 @@ const http = require("http");
 const https = require("https");
 const url = require("url");
 
-// Use a default URL if BASEURL is not defined
 const baseUrl = process.env.BASEURL;
 
 const pingServer = () => {
-  // Check if baseUrl is defined before making the request
   if (!baseUrl) {
     console.error("BASEURL is not defined. Skipping server ping.");
     return;
