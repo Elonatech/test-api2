@@ -90,21 +90,13 @@ const getTrendsById = async (req, res) => {
 
 // Get Blog By Id
 const getBlogId = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const blog = await Blog.findOne({
-      $or: [{ _id: id }, { slug: id }]
-    });
-
-    if (!blog) {
-      return res.status(404).send({ message: "Blog Not Found" });
-    }
-
-    return res.status(200).json(blog);
-  } catch (error) {
-    return res.status(500).send({ message: "An error occurred", error });
+  // Find Blog by Id
+  const getId = await Blog.findById(req.params.id);
+  if (!getId) {
+    return res.status(404).send({ message: "Blog Not Found" });
   }
+  const getBlogById = await Blog.findById(getId);
+  return res.status(200).json({ getBlogById });
 };
 
 
