@@ -2,12 +2,14 @@ const Product = require("../models/productModel");
 const RecentlyViewed = require("../models/recentlyViewesModel");
 const generateMetaHtml = require('../utils/generateMetaHtml');
 const mongoose = require("mongoose");
+const upload = require("../lib/multer");
 
 
 const cloudinary = require("../lib/cloudinary");
 
 const createProduct = async (req, res, next) => {
   try {
+    // Access form-data fields
     const {
       name,
       description,
@@ -34,28 +36,31 @@ const createProduct = async (req, res, next) => {
       graphics,
       voltage,
       battery,
-      wireless
+      wireless,
     } = req.body;
-    let images = [...req.body.images];
-    if (images.length === 0) {
-      return res.status(400).send("Added Product Images");
-    }
-    let imagesBuffer = [];
 
-    for (let i = 0; i < images.length; i++) {
-      const result = await cloudinary.uploader.upload(images[i], {
-        folder: "products"
+    if (!name || !brand || !price || !odd || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill Name, Brand, Price, and Category fields.",
+      });
+    }
+
+    // Check if files are included
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: false, message: "Please add product images." });
+    }
+
+    const imagesBuffer = [];
+    for (const file of req.files) {
+      // Upload each image to Cloudinary
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "products",
       });
       imagesBuffer.push({
         public_id: result.public_id,
-        url: result.secure_url
+        url: result.secure_url,
       });
-    }
-
-    if (!name || !brand || !price || !odd || !category) {
-      return res
-        .status(400)
-        .send("Please fill  Name, Brand, Price and Category fields");
     }
 
     const myRandomId = parseInt(Date.now() * Math.random());
@@ -88,17 +93,19 @@ const createProduct = async (req, res, next) => {
         graphics,
         voltage,
         battery,
-        wireless
+        wireless,
       },
-      images: imagesBuffer
+      images: imagesBuffer,
     };
+
     const product = await Product.create(data);
     res.status(201).json({ success: true, product });
   } catch (error) {
-    console.log(error);
+    console.error("Error creating product:", error);
     next(error);
   }
 };
+
 
 const getAllProducts = async (req, res, next) => {
   const getAllProducts = await Product.find();
