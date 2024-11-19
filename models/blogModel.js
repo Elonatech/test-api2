@@ -26,7 +26,6 @@ const blogSchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true,
-      required: true
     },
 
     cloudinary_id: {

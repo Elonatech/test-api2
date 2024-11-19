@@ -2,7 +2,7 @@ const http = require("http");
 const https = require("https");
 const url = require("url");
 
-const baseUrl = process.env.BASEURL;
+const baseUrl = process.env.BASEURL || 'http://localhost:8001';
 
 const pingServer = () => {
   if (!baseUrl) {
