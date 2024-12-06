@@ -39,6 +39,7 @@ const jobEmail = async (req, res) =>{
 		   const mailOptions = {
 			   from: 'webadmin@elonatech.com.ng',   
 			   to: ["contact@elonatech.com.ng", email],
+			   replyTo: 'noreply@elonatech.com.ng',
 			   subject:"Job Application",
 			   html:`<!DOCTYPE html>
 			   <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -805,6 +806,7 @@ const quoteEmail = async (req, res) =>{
     const mailOptions = {
         from: email,   
         to: ["admin@elonatech.com.ng"],
+		replyTo: 'noreply@elonatech.com.ng',
         subject:"Request Quote",
         html:`
 		
@@ -1479,6 +1481,7 @@ if (!cost){
 const mailOptions = {
     from:  email,   
     to: "info@elonatech.com.ng",
+	replyTo: 'noreply@elonatech.com.ng',
     subject:"Consultation",
     html:`
 		<!DOCTYPE html>
@@ -2144,6 +2147,7 @@ if (!message){
 const mailOptions = {
     from: email,   
     to: "info@elonatech.com.ng",
+	replyTo: 'noreply@elonatech.com.ng',
     subject:"Get in Touch with us",
     html:`
 	<!DOCTYPE html>
@@ -2742,6 +2746,7 @@ if (!message){
 const mailOptions = {
     from: email,   
     to: "info@elonatech.com.ng",
+	replyTo: 'noreply@elonatech.com.ng',
     subject:"Get in Touch with us",
     html:`
 	<!DOCTYPE html>
@@ -3355,7 +3360,7 @@ if (!notes){
 const mailOptions = {
     from: email,   
     to:["billing@elonatech.com.ng", email],
-	cc: email,
+	replyTo: 'noreply@elonatech.com.ng',
     subject:"Check Out",
     html: `
     
@@ -4104,6 +4109,7 @@ const retainerEmail = async (req, res) =>{
     const mailOptions = {
         from:  email,   
         to: "info@elonatech.com.ng",
+		replyTo: 'noreply@elonatech.com.ng',
         subject:"Retainership",
         html:`
 		<!DOCTYPE html>
@@ -4914,6 +4920,7 @@ if ( !discuss ){
 const mailOptions = {
     from: email,   
     to: "info@elonatech.com.ng",
+	replyTo: 'noreply@elonatech.com.ng',
     subject:"Book Session",
     html:`
 	<!DOCTYPE html>
